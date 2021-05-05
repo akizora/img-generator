@@ -78,18 +78,73 @@ class ImgController extends Controller
             $y = 26;
             $adjustX = 0;
             $adjustY = 30;
+        } elseif($length === 4) {
+            $this->size = 37;
+            $x = 89;
+            $y = 35;
+            $adjustXY = [
+                [0, 0],
+                [0, 32],
+                [-36, -32],
+                [0, 32],
+            ];
+        } elseif($length === 5) {
+            $this->size = 37;
+            $x = 86;
+            $y = 29;
+            $adjustXYSize = [
+                [0, 0, 28],
+                [0, 26, 28],
+                [0, 26, 28],
+                [-34, -50, 30],
+                [0, 32, 30],
+            ];
         }
-        foreach ($chunked as $char) {
-            $img->text($char, $x, $y, function($font){
-                $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
-                $font->file($fontPath);
-                $font->size($this->size);
-                $font->color('#fc2414');
-                $font->align('center');
-                $font->valign('top');
-            });
-            $x += $adjustX;
-            $y += $adjustY;
+
+        if ($length <= 3) {            
+            foreach ($chunked as $char) {
+                $img->text($char, $x, $y, function($font){
+                    $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
+                    $font->file($fontPath);
+                    $font->size($this->size);
+                    $font->color('#fc2414');
+                    $font->align('center');
+                    $font->valign('top');
+                });
+                $x += $adjustX;
+                $y += $adjustY;
+            }
+        } elseif($length === 4) {
+            $index = 0;
+            foreach ($chunked as $char) {
+                $x += $adjustXY[$index][0];
+                $y += $adjustXY[$index][1];
+                $img->text($char, $x, $y, function($font){
+                    $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
+                    $font->file($fontPath);
+                    $font->size($this->size);
+                    $font->color('#fc2414');
+                    $font->align('center');
+                    $font->valign('top');
+                });
+                $index++;
+            }
+        } elseif($length === 5) {
+            $index = 0;
+            foreach ($chunked as $char) {
+                $x += $adjustXYSize[$index][0];
+                $y += $adjustXYSize[$index][1];
+                $this->size = $adjustXYSize[$index][2];
+                $img->text($char, $x, $y, function($font){
+                    $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
+                    $font->file($fontPath);
+                    $font->size($this->size);
+                    $font->color('#fc2414');
+                    $font->align('center');
+                    $font->valign('top');
+                });
+                $index++;
+            }
         }
 
 
