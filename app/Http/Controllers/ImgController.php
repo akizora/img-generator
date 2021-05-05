@@ -60,32 +60,38 @@ class ImgController extends Controller
         $this->size = 35;
         $x = 73;
         $y = 43;
+        $adjustX = 0;
+        $adjustY = 0;
         if ($length === 1) {
-            $this->size = 40;
-            $x = 73;
-            $y = 47;
+            $this->size = 53;
+            $x = 72;
+            $y = 43;
         } elseif($length === 2) {
-            $this->size = 43;
+            $this->size = 39;
+            $x = 71;
+            $y = 30;
+            $adjustX = 1;
+            $adjustY = 40;
+        } elseif($length === 3) {
+            $this->size = 30;
             $x = 71;
             $y = 26;
-        } elseif($length === 3) {
-            $this->size = 25;
-            $x = 71;
-            $y = 43;
+            $adjustX = 0;
+            $adjustY = 30;
         }
-        // $img = Image::canvas(120, 60, '#000');
-        $img->text($verticalString, $x, $y, function($font){
-            $fontPath = storage_path('app/public/hkkaikk.ttf');
-            $fontPath = storage_path('app/public/AiharaHudemojiKaisho3.00.ttf');
-            $fontPath = storage_path('app/public/timemachine-wa.ttf');
-            $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
-            $font->file($fontPath);
-            $font->size($this->size);
-            $font->color('#fc2414');
-            $font->align('center');
-            $font->valign('top');
-            // $font->angle(30);
-        });
+        foreach ($chunked as $char) {
+            $img->text($char, $x, $y, function($font){
+                $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
+                $font->file($fontPath);
+                $font->size($this->size);
+                $font->color('#fc2414');
+                $font->align('center');
+                $font->valign('top');
+            });
+            $x += $adjustX;
+            $y += $adjustY;
+        }
+
 
         $save_path = storage_path('app/public/'.$printName.'.png');
         $img->save($save_path);
