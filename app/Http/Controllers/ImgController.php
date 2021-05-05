@@ -41,6 +41,7 @@ class ImgController extends Controller
         //
         Log::notice($request->get('name'));
         $printName = $request->get('name');
+        // $printName = utf8_encode($printName);
 
         //文字列を1文字づつ配列にする。マルチバイトがないのであれば、str_splitでも可能
         $length = mb_strlen($printName,'UTF-8');
@@ -48,6 +49,7 @@ class ImgController extends Controller
         for ($i = 0; $i < $length; $i++) {
             $chunked[] = mb_substr($printName, $i, 1, 'UTF-8');
         }
+        Log::info($chunked);
         //配列を改行でjoin
         $verticalString = join("\n",$chunked);
 
@@ -74,6 +76,9 @@ class ImgController extends Controller
         // $img = Image::canvas(120, 60, '#000');
         $img->text($verticalString, $x, $y, function($font){
             $fontPath = storage_path('app/public/hkkaikk.ttf');
+            $fontPath = storage_path('app/public/AiharaHudemojiKaisho3.00.ttf');
+            $fontPath = storage_path('app/public/timemachine-wa.ttf');
+            $fontPath = storage_path('app/public/SourceHanSerif-Heavy.otf');
             $font->file($fontPath);
             $font->size($this->size);
             $font->color('#fc2414');
@@ -82,12 +87,10 @@ class ImgController extends Controller
             // $font->angle(30);
         });
 
-        $save_path = storage_path('app/public/png1.png');
+        $save_path = storage_path('app/public/'.$printName.'.png');
         $img->save($save_path);
-        $tmpFileName = 'test';
-        $downloadLink = asset('storage/png1.png');
+        $downloadLink = asset('storage/'.$printName.'.png');
         $returnArray = [
-            'file_name' => $tmpFileName,
             'download_link' => $downloadLink,
         ];
         return response()->json($returnArray, 200);

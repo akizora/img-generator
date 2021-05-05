@@ -1906,50 +1906,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1958,25 +1914,32 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      imgName: ""
+      imgName: "",
+      hankoImg: "http://localhost:8000/storage/png.png"
     };
   },
   methods: {
     createImg: function createImg() {
+      var _this = this;
+
       var url = "http://localhost:8000/api/img";
       console.log(this.imgName);
       var data = {
         "name": this.imgName
       };
       return axios__WEBPACK_IMPORTED_MODULE_0___default().post(url, data).then(function (res) {
-        console.log(res.data);
-        var filename = res.data.file_name;
+        _this.hankoImg = "";
+        console.log(res.data); // const filename = res.data.file_name;
+
         var fileURL = res.data.download_link;
         var fileLink = document.createElement('a');
-        fileLink.href = fileURL;
-        fileLink.setAttribute('download', filename);
+        fileLink.href = fileURL; // fileLink.setAttribute('download', filename);
+
         document.body.appendChild(fileLink);
-        fileLink.click();
+        console.log(fileLink); // fileLink.click();
+
+        _this.hankoImg = "";
+        _this.hankoImg = fileURL;
       })["catch"](function (err) {
         console.error(err);
       });
@@ -2055,7 +2018,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ninput::-moz-placeholder {\r\n  color: #cccccc;\n}\ninput:-ms-input-placeholder {\r\n  color: #cccccc;\n}\ninput::placeholder {\r\n  color: #cccccc;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.btn {\r\n  background-color: #fc2414 !important;\n}\n.prev {\r\n  background: #fff;\n}\ninput::-moz-placeholder {\r\n  color: #cccccc;\n}\ninput:-ms-input-placeholder {\r\n  color: #cccccc;\n}\ninput::placeholder {\r\n  color: #cccccc;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -19788,7 +19751,7 @@ var render = function() {
       _c("section", { staticClass: "hero" }, [
         _c("div", { staticClass: "background-image" }),
         _vm._v(" "),
-        _c("h1", [_vm._v("はんこ画像 作成")]),
+        _c("p", [_vm._v("はんこ画像 作成")]),
         _vm._v(" "),
         _c("div", [
           _c("input", {
@@ -19822,6 +19785,12 @@ var render = function() {
             },
             [_vm._v("つくる")]
           )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "prev" }, [
+          _c("a", { attrs: { href: _vm.hankoImg, download: _vm.imgName } }, [
+            _c("img", { attrs: { src: _vm.hankoImg } })
+          ])
         ])
       ]),
       _vm._v(" "),

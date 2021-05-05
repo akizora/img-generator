@@ -1,62 +1,18 @@
 <template>
 <div>
-    <the-header />
+  <the-header />
 	<section class="hero">
-		<div
-      class="background-image"
-    >
+		<div class="background-image">
     </div>
-		<h1>はんこ画像 作成</h1>
+		<p>はんこ画像 作成</p>
 		<div>
 			<input type="text" placeholder="名前を入力してください" class="new" v-model="imgName">
 			<a class="btn" id="newBtn" @click="this.createImg">つくる</a>
 		</div>
+    <div class="prev">
+			<a :href="hankoImg" :download="imgName"><img :src="hankoImg" /></a>
+    </div>
 	</section>	
-
-	<!-- <section class="features">
-		<h3 class="title">Features and services</h3>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id felis et ipsum bibendum ultrices. Morbi vitae pulvinar velit. Sed aliquam dictum sapien, id sagittis augue malesuada eu.</p>
-		<hr>
-
-		<ul class="grid">
-			<li>
-				<i class="fa fa-camera-retro"></i>
-				<h4>Photography</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id felis et ipsum bibendum ultrices vitae pulvinar velit.</p>
-			</li>
-			<li>
-				<i class="fa fa-cubes"></i>
-				<h4>Web Development</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id felis et ipsum bibendum ultrices vitae pulvinar velit.</p>
-			</li>
-			<li>
-				<i class="fa fa-newspaper-o"></i>
-				<h4>Content Editing</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id felis et ipsum bibendum ultrices vitae pulvinar velit.</p>
-			</li>
-		</ul>
-	</section> -->
-
-	<!-- <section class="reviews">
-		<h3 class="title">What others say:</h3>
-		<p class="quote">Mauris sit amet mauris a arcu eleifend ultricies eget ut dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-		<p class="author">— Patrick Farrell</p>
-		<p class="quote">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id felis et ipsum bibendum ultrices. Morbi vitae pulvinar velit. Sed aliquam dictum sapien, id sagittis augue malesuada eu.</p>
-		<p class="author">— George Smith</p>
-		<p class="quote">Donec commodo dolor augue, vitae faucibus tortor tincidunt in. Aliquam vitae leo quis mi pulvinar ornare. Integer eu iaculis metus.</p>
-		<p class="author">— Kevin Blake</p>
-	</section> -->
-
-	<!-- <section class="contact">
-		<h3 class="title">Join our newsletter</h3>	
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id felis et ipsum bibendum ultrices. Morbi vitae pulvinar velit. Sed aliquam dictum sapien, id sagittis augue malesuada eu.</p>
-		<hr>
-
-		<form>
-			<input type="email" placeholder="Email">
-			<a href="#" class="btn">Subscribe now</a>
-		</form>
-	</section> -->
 
 	<footer>
 		<ul>
@@ -83,7 +39,8 @@ export default {
   },
   data() {
     return {
-      imgName : ""
+      imgName : "",
+      hankoImg : "http://localhost:8000/storage/png.png"
     }
   },
   methods: {
@@ -95,14 +52,18 @@ export default {
       }
       return axios.post(url, data)
         .then((res) => {
+          this.hankoImg = "";
           console.log(res.data);
-          const filename = res.data.file_name;
+          // const filename = res.data.file_name;
           const fileURL = res.data.download_link;
           const fileLink = document.createElement('a');
           fileLink.href = fileURL;
-          fileLink.setAttribute('download', filename);
+          // fileLink.setAttribute('download', filename);
           document.body.appendChild(fileLink);
-          fileLink.click();
+          console.log(fileLink)
+          // fileLink.click();
+          this.hankoImg = "";
+          this.hankoImg = fileURL;
         })
         .catch((err) => {
           console.error(err);
@@ -113,6 +74,12 @@ export default {
 </script>
 
 <style>
+.btn {
+  background-color: #fc2414 !important;
+}
+.prev {
+  background: #fff;
+}
 input::placeholder {
   color: #cccccc;
 }
