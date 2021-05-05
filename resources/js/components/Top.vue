@@ -4,13 +4,12 @@
 	<section class="hero">
 		<div
       class="background-image"
-      style="background-image: url(img/hero.jpg);"
     >
     </div>
-		<h1>認印画像作成ツール</h1>
+		<h1>はんこ画像 作成</h1>
 		<div>
-			<input type="text" placeholder="田中" class="new" :model="name">
-			<a href="#" class="btn" id="newBtn" @click="createImg">つくる</a>
+			<input type="text" placeholder="名前を入力してください" class="new" v-model="imgName">
+			<a class="btn" id="newBtn" @click="this.createImg">つくる</a>
 		</div>
 	</section>	
 
@@ -84,16 +83,26 @@ export default {
   },
   data() {
     return {
-      name : "" 
+      imgName : ""
     }
   },
   methods: {
     createImg: function() {
       const url = "http://localhost:8000/api/img";
-      console.log(name)
-      const response = await axios.post(url, this.name)
+      console.log(this.imgName)
+      const data = {
+        "name" : this.imgName
+      }
+      return axios.post(url, data)
         .then((res) => {
           console.log(res.data);
+          const filename = res.data.file_name;
+          const fileURL = res.data.download_link;
+          const fileLink = document.createElement('a');
+          fileLink.href = fileURL;
+          fileLink.setAttribute('download', filename);
+          document.body.appendChild(fileLink);
+          fileLink.click();
         })
         .catch((err) => {
           console.error(err);
@@ -104,5 +113,7 @@ export default {
 </script>
 
 <style>
-
+input::placeholder {
+  color: #cccccc;
+}
 </style>
